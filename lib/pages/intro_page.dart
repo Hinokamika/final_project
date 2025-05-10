@@ -1,4 +1,3 @@
-import 'package:final_project/pages/home_page.dart';
 import 'package:final_project/pages/user_info_page.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +17,11 @@ class IntroPage extends StatelessWidget {
 
             const Text(
               'Timeless Fitness, Ageless Strength',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF1C2526)),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF1C2526),
+              ),
             ),
 
             const SizedBox(height: 10),

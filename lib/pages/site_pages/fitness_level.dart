@@ -6,28 +6,44 @@ class FitnessLevel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text(
-                  'Fitness Level',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          borderRadius: BorderRadius.circular(10),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Fitness Level',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'This is where user information will be displayed.',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 20),
-                Text(
-                  'Please select your fitness level:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                // Add your fitness level selection widgets here
-              ],
+              ),
             ),
-          ),
+          )
         ),
       ),
     );
