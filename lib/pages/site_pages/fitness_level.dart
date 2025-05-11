@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+final _formKey = GlobalKey<FormState>();
 class FitnessLevel extends StatelessWidget {
   const FitnessLevel({Key? key}) : super(key: key);
 
@@ -12,14 +13,14 @@ class FitnessLevel extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
+            padding: const EdgeInsets.only(top: 25),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -32,18 +33,31 @@ class FitnessLevel extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
-                      'This is where user information will be displayed.',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Current Fitness Level',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Preferred Workout Type',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-          )
+          ),
         ),
       ),
     );

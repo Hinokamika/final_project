@@ -15,7 +15,7 @@ class UserInfoPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SizedBox(
-            height: 850,
+            height: 900,
             child: PageView(
               controller: _controller,
               children: const [
