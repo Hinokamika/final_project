@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 final _formKey = GlobalKey<FormState>();
+
 class FitnessLevel extends StatelessWidget {
-  const FitnessLevel({Key? key}) : super(key: key);
+  const FitnessLevel({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class FitnessLevel extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
                     Form(
                       key: _formKey,
                       child: Column(
@@ -40,14 +41,26 @@ class FitnessLevel extends StatelessWidget {
                           TextFormField(
                             decoration: InputDecoration(
                               labelText: 'Current Fitness Level',
-                              border: OutlineInputBorder(),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  width: 1,
+                                ),
+                              ),
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 30),
                           TextFormField(
                             decoration: InputDecoration(
                               labelText: 'Preferred Workout Type',
-                              border: OutlineInputBorder(),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  width: 1,
+                                ),
+                              ),
                             ),
                           ),
                         ],

@@ -1,3 +1,4 @@
+import 'package:final_project/pages/register_login_pages/authentication_page.dart';
 import 'package:final_project/pages/site_pages/fitness_level.dart';
 import 'package:final_project/pages/site_pages/health_goal.dart';
 import 'package:final_project/pages/site_pages/user_information.dart';
@@ -22,11 +23,12 @@ class UserInfoPage extends StatelessWidget {
                 UserInformation(),
                 FitnessLevel(),
                 HealthGoal(),
+                AuthenticationPage(),
               ],
             ),
           ),
 
-          SmoothPageIndicator(controller: _controller, count: 3,
+          SmoothPageIndicator(controller: _controller, count: 4,
             effect: const WormEffect(
               activeDotColor: Color(0xFFFF3333),
               dotHeight: 10,
