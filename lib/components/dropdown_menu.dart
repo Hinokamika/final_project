@@ -22,7 +22,7 @@ class _DropBoxMenuState extends State<DropBoxMenu> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 2.0),
+      padding: const EdgeInsets.symmetric(horizontal: 1.0, vertical: 1.0),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
       child: DropdownButtonFormField<String>(
         value: widget.value,

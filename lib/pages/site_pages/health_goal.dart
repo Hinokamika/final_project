@@ -1,10 +1,18 @@
+import 'package:final_project/components/dropdown_menu.dart';
 import 'package:flutter/material.dart';
 
 final _formKey = GlobalKey<FormState>();
+String? _specificDietState;
+String? _fitnessGoalState;
 
-class HealthGoal extends StatelessWidget {
+class HealthGoal extends StatefulWidget {
   const HealthGoal({super.key});
 
+  @override
+  State<HealthGoal> createState() => _HealthGoalState();
+}
+
+class _HealthGoalState extends State<HealthGoal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,26 +46,40 @@ class HealthGoal extends StatelessWidget {
                       key: _formKey,
                       child: Column(
                         children: [
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Goal',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
-                              ),
-                            ),
+                          DropBoxMenu(
+                            labelText: 'What is your primary health goal?',
+                            value: _specificDietState,
+                            options: {
+                              'weight_loss': 'Weight Loss',
+                              'muscle_gain': 'Muscle Gain',
+                              'maintain_weight': 'Maintain Weight',
+                            },
+                            onChanged: (String? value) {
+                              setState(() {
+                                _specificDietState = value;
+                              });
+                            },
                           ),
                           SizedBox(height: 30),
+                          DropBoxMenu(
+                            labelText:
+                                'Do you have any specific fitness goals?',
+                            value: _fitnessGoalState,
+                            options: {'yes': 'Yes ', 'no': 'No '},
+                            onChanged: (String? value) {
+                              setState(() {
+                                _fitnessGoalState = value;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 30),
                           TextFormField(
                             decoration: InputDecoration(
-                              labelText: 'Target Date',
+                              labelText: 'Additional Notes',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: Colors.grey,
+                                borderSide: const BorderSide(
+                                  color: Colors.black,
                                   width: 1,
                                 ),
                               ),
@@ -71,6 +93,25 @@ class HealthGoal extends StatelessWidget {
               ),
             ),
           ),
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(right: 20),
+        child: FloatingActionButton(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              print('Gender: $_specificDietState');
+              print('Age Group: $_fitnessGoalState');
+            }
+          },
+          backgroundColor: const Color(0xFFFF3333),
+          tooltip: 'Submit',
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: const BorderSide(color: Colors.white, width: 2),
+          ),
+          elevation: 5,
+          child: const Icon(Icons.send, size: 25, color: Colors.white),
         ),
       ),
     );

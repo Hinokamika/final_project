@@ -2,7 +2,7 @@ import 'package:final_project/components/dropdown_menu.dart';
 import 'package:flutter/material.dart';
 
 class UserInformation extends StatefulWidget {
-  const UserInformation({super.key});
+  const UserInformation({Key? key}) : super(key: key);
 
   @override
   State<UserInformation> createState() => _UserInformationState();
@@ -10,7 +10,8 @@ class UserInformation extends StatefulWidget {
 
 class _UserInformationState extends State<UserInformation> {
   final _formKey = GlobalKey<FormState>();
-  String? _selectedOption;
+  String? _genderOption;
+  String? _ageGroupOption;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 
@@ -101,24 +102,30 @@ class _UserInformationState extends State<UserInformation> {
                               },
                             ),
                             const SizedBox(height: 30),
-                            SizedBox(
-                              width:
-                                  double
-                                      .infinity, // Match the width of other input fields
-                              child: DropBoxMenu(
-                                labelText: 'Age Group',
-                                value: _selectedOption,
-                                options: {
-                                  'below 18': 'Below 18',
-                                  '20-30': '20-30',
-                                  'above 30': 'Above 30',
-                                },
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    _selectedOption = value;
-                                  });
-                                },
-                              ),
+                            DropBoxMenu(
+                              labelText: 'What is your gender?',
+                              value: _genderOption,
+                              options: {'male': 'Male', 'female': 'Female'},
+                              onChanged: (String? value) {
+                                setState(() {
+                                  _genderOption = value;
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 30),
+                            DropBoxMenu(
+                              labelText: 'Age Group',
+                              value: _ageGroupOption,
+                              options: {
+                                'below 18': 'Below 18',
+                                '20-30': '20-30',
+                                'above 30': 'Above 30',
+                              },
+                              onChanged: (String? value) {
+                                setState(() {
+                                  _ageGroupOption = value;
+                                });
+                              },
                             ),
                           ],
                         ),
@@ -129,6 +136,27 @@ class _UserInformationState extends State<UserInformation> {
               ),
             ),
           ),
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(right: 20),
+        child: FloatingActionButton(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              print('Name: ${_nameController.text}');
+              print('Email: ${_emailController.text}');
+              print('Gender: $_genderOption');
+              print('Age Group: $_ageGroupOption');
+            }
+          },
+          backgroundColor: const Color(0xFFFF3333),
+          tooltip: 'Submit',
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: const BorderSide(color: Colors.white, width: 2),
+          ),
+          elevation: 5,
+          child: const Icon(Icons.send, size: 25, color: Colors.white),
         ),
       ),
     );

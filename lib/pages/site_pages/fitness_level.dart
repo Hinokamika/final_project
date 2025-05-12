@@ -1,9 +1,19 @@
+import 'package:final_project/components/dropdown_menu.dart';
 import 'package:flutter/material.dart';
 
 final _formKey = GlobalKey<FormState>();
+String? _selectedOption;
 
-class FitnessLevel extends StatelessWidget {
-  const FitnessLevel({super.key});
+class FitnessLevel extends StatefulWidget {
+  const FitnessLevel({Key? key}) : super(key: key);
+
+  @override
+  State<FitnessLevel> createState() => _FitnessLevelState();
+}
+
+class _FitnessLevelState extends State<FitnessLevel> {
+  String? _fitnessLevelState;
+  String? _exerciseState;
 
   @override
   Widget build(BuildContext context) {
@@ -38,30 +48,47 @@ class FitnessLevel extends StatelessWidget {
                       key: _formKey,
                       child: Column(
                         children: [
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Current Fitness Level',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
-                              ),
-                            ),
+                          DropBoxMenu(
+                            labelText: 'How would you rate your fitness level?',
+                            value: _fitnessLevelState,
+                            options: {
+                              'beginner': 'Beginner (little to no experience)',
+                              'intermediate': 'Intermediate (some experience)',
+                              'advanced': 'Advanced (more than 5 years)',
+                            },
+                            onChanged: (String? value) {
+                              setState(() {
+                                _fitnessLevelState = value;
+                              });
+                            },
                           ),
-                          const SizedBox(height: 30),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Preferred Workout Type',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
-                              ),
-                            ),
+                          const SizedBox(height: 20),
+                          DropBoxMenu(
+                            labelText: 'Do you currently exercise?',
+                            value: _exerciseState,
+                            options: {
+                              'yes': 'Yes (I exercise regularly)',
+                              'no': 'No (I do not exercise regularly)',
+                            },
+                            onChanged: (String? value) {
+                              setState(() {
+                                _exerciseState = value;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          DropBoxMenu(
+                            labelText: 'Do you currently exercise?',
+                            value: _exerciseState,
+                            options: {
+                              'yes': 'Yes (I exercise regularly)',
+                              'no': 'No (I do not exercise regularly)',
+                            },
+                            onChanged: (String? value) {
+                              setState(() {
+                                _exerciseState = value;
+                              });
+                            },
                           ),
                         ],
                       ),
@@ -71,6 +98,25 @@ class FitnessLevel extends StatelessWidget {
               ),
             ),
           ),
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(right: 20),
+        child: FloatingActionButton(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              print('Level State: $_fitnessLevelState');
+              print('Exercise State: $_exerciseState');
+            }
+          },
+          backgroundColor: const Color(0xFFFF3333),
+          tooltip: 'Submit',
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: const BorderSide(color: Colors.white, width: 2),
+          ),
+          elevation: 5,
+          child: const Icon(Icons.send, size: 25, color: Colors.white),
         ),
       ),
     );
