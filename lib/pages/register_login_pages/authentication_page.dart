@@ -1,9 +1,15 @@
 import 'package:final_project/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
-class AuthenticationPage extends StatelessWidget {
-  const AuthenticationPage({super.key});
+class AuthenticationPage extends StatefulWidget {
+  final PageController controller;
+  const AuthenticationPage({super.key, required this.controller});
 
+  @override
+  State<AuthenticationPage> createState() => _AuthenticationPageState();
+}
+
+class _AuthenticationPageState extends State<AuthenticationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,6 +106,26 @@ class AuthenticationPage extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(left: 20),
+        child: FloatingActionButton(
+          onPressed: () {
+            widget.controller.previousPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          },
+          backgroundColor: Colors.grey,
+          tooltip: 'Go Back',
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: const BorderSide(color: Colors.white, width: 2),
+          ),
+          elevation: 5,
+          child: const Icon(Icons.arrow_back, color: Colors.white),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
 }

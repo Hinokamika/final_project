@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class UserInformation extends StatefulWidget {
   final PageController controller;
-  const UserInformation({Key? key, required this.controller}) : super(key: key);
+  const UserInformation({super.key, required this.controller});
 
   @override
   State<UserInformation> createState() => _UserInformationState();
@@ -115,8 +115,8 @@ class _UserInformationState extends State<UserInformation> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please select your gender';
-                                  }
-                                },
+                                }
+                              },
                             ),
                             const SizedBox(height: 30),
                             DropBoxMenu(
@@ -135,8 +135,8 @@ class _UserInformationState extends State<UserInformation> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'PLease select your age group';
-                                  }
-                                },
+                                }
+                              },
                             ),
                           ],
                         ),
@@ -159,9 +159,9 @@ class _UserInformationState extends State<UserInformation> {
               print('Gender: $_genderOption');
               print('Age Group: $_ageGroupOption');
               widget.controller.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
             }
           },
           backgroundColor: const Color(0xFFFF3333),
@@ -171,7 +171,7 @@ class _UserInformationState extends State<UserInformation> {
             side: const BorderSide(color: Colors.white, width: 2),
           ),
           elevation: 5,
-          child: const Icon(Icons.send, size: 25, color: Colors.white),
+          child: const Icon(Icons.arrow_forward, size: 25, color: Colors.white),
         ),
       ),
     );

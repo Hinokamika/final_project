@@ -31,7 +31,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
                 UserInformation(controller: _controller),
                 FitnessLevel(controller: _controller),
                 HealthGoal(controller: _controller),
-                AuthenticationPage(),
+                AuthenticationPage(controller: _controller),
               ],
             ),
           ),
