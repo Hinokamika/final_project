@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class DropBoxMenu extends StatefulWidget {
   final String? value;
   final String? labelText;
+  final Function(String?)? validator;
   final Map<String, String> options;
   final ValueChanged<String?>? onChanged;
 
@@ -11,7 +12,7 @@ class DropBoxMenu extends StatefulWidget {
     required this.value,
     required this.labelText,
     required this.options,
-    this.onChanged,
+    this.onChanged, this.validator,
   });
 
   @override
@@ -51,10 +52,7 @@ class _DropBoxMenuState extends State<DropBoxMenu> {
               );
             }).toList(),
         validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please select an option';
-          }
-          return null;
+          return widget.validator!(value);
         },
       ),
     );

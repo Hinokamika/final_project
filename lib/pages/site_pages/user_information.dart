@@ -2,7 +2,8 @@ import 'package:final_project/components/dropdown_menu.dart';
 import 'package:flutter/material.dart';
 
 class UserInformation extends StatefulWidget {
-  const UserInformation({Key? key}) : super(key: key);
+  final PageController controller;
+  const UserInformation({Key? key, required this.controller}) : super(key: key);
 
   @override
   State<UserInformation> createState() => _UserInformationState();
@@ -111,6 +112,11 @@ class _UserInformationState extends State<UserInformation> {
                                   _genderOption = value;
                                 });
                               },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please select your gender';
+                                  }
+                                },
                             ),
                             const SizedBox(height: 30),
                             DropBoxMenu(
@@ -126,6 +132,11 @@ class _UserInformationState extends State<UserInformation> {
                                   _ageGroupOption = value;
                                 });
                               },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'PLease select your age group';
+                                  }
+                                },
                             ),
                           ],
                         ),
@@ -147,6 +158,10 @@ class _UserInformationState extends State<UserInformation> {
               print('Email: ${_emailController.text}');
               print('Gender: $_genderOption');
               print('Age Group: $_ageGroupOption');
+              widget.controller.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
             }
           },
           backgroundColor: const Color(0xFFFF3333),

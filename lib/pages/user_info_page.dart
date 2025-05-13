@@ -5,8 +5,15 @@ import 'package:final_project/pages/site_pages/user_information.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class UserInfoPage extends StatelessWidget {
-  final _controller = PageController();
+class UserInfoPage extends StatefulWidget {
+  const UserInfoPage({Key? key}) : super(key: key);
+
+  @override
+  State<UserInfoPage> createState() => _UserInfoPageState();
+}
+
+class _UserInfoPageState extends State<UserInfoPage> {
+  final PageController _controller = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -19,16 +26,19 @@ class UserInfoPage extends StatelessWidget {
             height: 900,
             child: PageView(
               controller: _controller,
-              children: const [
-                UserInformation(),
-                FitnessLevel(),
-                HealthGoal(),
+              physics: const NeverScrollableScrollPhysics(),  // ← disable swipe
+              children: [
+                UserInformation(controller: _controller),
+                FitnessLevel(controller: _controller),
+                HealthGoal(controller: _controller),
                 AuthenticationPage(),
               ],
             ),
           ),
 
-          SmoothPageIndicator(controller: _controller, count: 4,
+          SmoothPageIndicator(
+            controller: _controller,
+            count: 4,
             effect: const WormEffect(
               activeDotColor: Color(0xFFFF3333),
               dotHeight: 10,

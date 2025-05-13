@@ -6,7 +6,8 @@ String? _specificDietState;
 String? _fitnessGoalState;
 
 class HealthGoal extends StatefulWidget {
-  const HealthGoal({super.key});
+  final PageController controller;
+  const HealthGoal({super.key, required this.controller});
 
   @override
   State<HealthGoal> createState() => _HealthGoalState();
@@ -54,6 +55,11 @@ class _HealthGoalState extends State<HealthGoal> {
                               'muscle_gain': 'Muscle Gain',
                               'maintain_weight': 'Maintain Weight',
                             },
+                            validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'PLease select your health goal';
+                                  }
+                                },
                             onChanged: (String? value) {
                               setState(() {
                                 _specificDietState = value;
@@ -66,6 +72,11 @@ class _HealthGoalState extends State<HealthGoal> {
                                 'Do you have any specific fitness goals?',
                             value: _fitnessGoalState,
                             options: {'yes': 'Yes ', 'no': 'No '},
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'PLease select your option!';
+                              }
+                            },
                             onChanged: (String? value) {
                               setState(() {
                                 _fitnessGoalState = value;
@@ -102,6 +113,10 @@ class _HealthGoalState extends State<HealthGoal> {
             if (_formKey.currentState!.validate()) {
               print('Gender: $_specificDietState');
               print('Age Group: $_fitnessGoalState');
+              widget.controller.nextPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
             }
           },
           backgroundColor: const Color(0xFFFF3333),

@@ -2,10 +2,10 @@ import 'package:final_project/components/dropdown_menu.dart';
 import 'package:flutter/material.dart';
 
 final _formKey = GlobalKey<FormState>();
-String? _selectedOption;
 
 class FitnessLevel extends StatefulWidget {
-  const FitnessLevel({Key? key}) : super(key: key);
+  final PageController controller;
+  const FitnessLevel({super.key, required this.controller});
 
   @override
   State<FitnessLevel> createState() => _FitnessLevelState();
@@ -56,6 +56,11 @@ class _FitnessLevelState extends State<FitnessLevel> {
                               'intermediate': 'Intermediate (some experience)',
                               'advanced': 'Advanced (more than 5 years)',
                             },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'PLease select your fitness level';
+                              }
+                            },
                             onChanged: (String? value) {
                               setState(() {
                                 _fitnessLevelState = value;
@@ -70,19 +75,10 @@ class _FitnessLevelState extends State<FitnessLevel> {
                               'yes': 'Yes (I exercise regularly)',
                               'no': 'No (I do not exercise regularly)',
                             },
-                            onChanged: (String? value) {
-                              setState(() {
-                                _exerciseState = value;
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 20),
-                          DropBoxMenu(
-                            labelText: 'Do you currently exercise?',
-                            value: _exerciseState,
-                            options: {
-                              'yes': 'Yes (I exercise regularly)',
-                              'no': 'No (I do not exercise regularly)',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'PLease select your exercise status';
+                              }
                             },
                             onChanged: (String? value) {
                               setState(() {
@@ -107,6 +103,10 @@ class _FitnessLevelState extends State<FitnessLevel> {
             if (_formKey.currentState!.validate()) {
               print('Level State: $_fitnessLevelState');
               print('Exercise State: $_exerciseState');
+              widget.controller.nextPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
             }
           },
           backgroundColor: const Color(0xFFFF3333),
