@@ -1,4 +1,5 @@
-import 'package:final_project/pages/home_page.dart';
+import 'package:final_project/pages/register_login_pages/login.dart';
+import 'package:final_project/pages/register_login_pages/register.dart';
 import 'package:flutter/material.dart';
 
 class AuthenticationPage extends StatefulWidget {
@@ -50,7 +51,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                                   () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => HomePage(),
+                                      builder: (context) => LoginPage(),
                                     ),
                                   ),
                               style: ElevatedButton.styleFrom(
@@ -75,7 +76,12 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                             width: 300, // Updated width for buttons
                             child: ElevatedButton(
                               onPressed: () {
-                                // Handle login action
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const RegisterPage(),
+                                  ),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(

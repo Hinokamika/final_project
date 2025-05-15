@@ -14,14 +14,6 @@ class _UserInformationState extends State<UserInformation> {
   String? _genderOption;
   String? _ageGroupOption;
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,31 +65,6 @@ class _UserInformationState extends State<UserInformation> {
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter your name';
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(height: 30),
-                            TextFormField(
-                              controller: _emailController,
-                              decoration: InputDecoration(
-                                labelText: 'Email',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: const BorderSide(
-                                    color: Colors.black,
-                                    width: 1,
-                                  ),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter your email';
-                                }
-                                if (!RegExp(
-                                  r'^[^@]+@[^@]+\.[^@]+',
-                                ).hasMatch(value)) {
-                                  return 'Please enter a valid email';
                                 }
                                 return null;
                               },
@@ -155,7 +122,6 @@ class _UserInformationState extends State<UserInformation> {
           onPressed: () {
             if (_formKey.currentState!.validate()) {
               print('Name: ${_nameController.text}');
-              print('Email: ${_emailController.text}');
               print('Gender: $_genderOption');
               print('Age Group: $_ageGroupOption');
               widget.controller.nextPage(
