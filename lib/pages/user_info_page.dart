@@ -17,13 +17,15 @@ class _UserInfoPageState extends State<UserInfoPage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.grey[200],
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SizedBox(
-            height: 900,
+            height: screenHeight * 0.58,
             child: PageView(
               controller: _controller,
               physics: const NeverScrollableScrollPhysics(),  // ← disable swipe
@@ -33,17 +35,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
                 HealthGoal(controller: _controller),
                 AuthenticationPage(controller: _controller),
               ],
-            ),
-          ),
-
-          SmoothPageIndicator(
-            controller: _controller,
-            count: 4,
-            effect: const WormEffect(
-              activeDotColor: Color(0xFFFF3333),
-              dotHeight: 10,
-              dotWidth: 10,
-              spacing: 16,
             ),
           ),
         ],

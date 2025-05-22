@@ -17,6 +17,7 @@ class _HealthGoalState extends State<HealthGoal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
@@ -136,7 +137,7 @@ class _HealthGoalState extends State<HealthGoal> {
 
       // Submit Button (Right FAB)
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(right: 20),
+        padding: const EdgeInsets.only(right: 20, bottom: 10),
         child: FloatingActionButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {

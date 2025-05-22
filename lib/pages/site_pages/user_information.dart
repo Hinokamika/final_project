@@ -18,6 +18,7 @@ class _UserInformationState extends State<UserInformation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.transparent,
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -31,9 +32,8 @@ class _UserInformationState extends State<UserInformation> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
                       'User Information',
@@ -117,7 +117,7 @@ class _UserInformationState extends State<UserInformation> {
         ),
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(right: 20),
+        padding: const EdgeInsets.only(right: 20, bottom: 20),
         child: FloatingActionButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
