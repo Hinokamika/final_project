@@ -1,162 +1,140 @@
-import 'package:final_project/components/dropdown_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/providers.dart'; // Import the providers.dart file
 
-final _formKey = GlobalKey<FormState>();
-String? _specificDietState;
-String? _fitnessGoalState;
-
-class HealthGoal extends StatefulWidget {
+class HealthGoal extends ConsumerStatefulWidget {
   final PageController controller;
+
   const HealthGoal({super.key, required this.controller});
 
   @override
-  State<HealthGoal> createState() => _HealthGoalState();
+  ConsumerState<HealthGoal> createState() => _HealthGoalState();
 }
 
-class _HealthGoalState extends State<HealthGoal> {
+class _HealthGoalState extends ConsumerState<HealthGoal> {
+  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _notesController;
+
+  @override
+  void initState() {
+    super.initState();
+    final userData = ref.read(userDataProvider);
+    _notesController = TextEditingController(text: userData.additionalNotes);
+  }
+
+  @override
+  void dispose() {
+    _notesController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final userData = ref.watch(userDataProvider);
+    final userDataNotifier = ref.watch(userDataProvider.notifier);
+
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          // Main Content
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 25),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Health Goal',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 30),
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              DropBoxMenu(
-                                labelText: 'What is your primary health goal?',
-                                value: _specificDietState,
-                                options: {
-                                  'weight_loss': 'Weight Loss',
-                                  'muscle_gain': 'Muscle Gain',
-                                  'maintain_weight': 'Maintain Weight',
-                                },
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'PLease select your health goal';
-                                  }
-                                },
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    _specificDietState = value;
-                                  });
-                                },
-                              ),
-                              const SizedBox(height: 30),
-                              DropBoxMenu(
-                                labelText:
-                                    'Do you have any specific fitness goals?',
-                                value: _fitnessGoalState,
-                                options: {'yes': 'Yes ', 'no': 'No '},
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'PLease select your option!';
-                                  }
-                                },
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    _fitnessGoalState = value;
-                                  });
-                                },
-                              ),
-                              const SizedBox(height: 30),
-                              TextFormField(
-                                decoration: InputDecoration(
-                                  labelText: 'Additional Notes',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(
-                                      color: Colors.black,
-                                      width: 1,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+      body: Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              const Text(
+                'Health Goal',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              DropdownButtonFormField<String>(
+                value:
+                    userData.primaryHealthGoal.isEmpty
+                        ? null
+                        : userData.primaryHealthGoal,
+                decoration: const InputDecoration(
+                  labelText: 'Primary Health Goal',
                 ),
+                items:
+                    ['Weight Loss', 'Muscle Gain', 'Maintain Weight'].map((
+                      String value,
+                    ) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                onChanged: (newValue) {
+                  if (newValue != null) {
+                    userDataNotifier.updatePrimaryHealthGoal(newValue);
+                  }
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select a health goal';
+                  }
+                  return null;
+                },
               ),
-            ),
-          ),
-
-          // Back Button (Left FAB)
-          Positioned(
-            left: 40,
-            bottom: 40,
-            child: FloatingActionButton(
-              onPressed: () {
-                widget.controller.previousPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-              },
-              backgroundColor: Colors.grey,
-              tooltip: 'Go Back',
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-                side: const BorderSide(color: Colors.white, width: 2),
+              DropdownButtonFormField<String>(
+                value:
+                    userData.fitnessGoal.isEmpty ? null : userData.fitnessGoal,
+                decoration: const InputDecoration(
+                  labelText: 'Specific Fitness Goals',
+                ),
+                items:
+                    ['Yes', 'No'].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                onChanged: (newValue) {
+                  if (newValue != null) {
+                    userDataNotifier.updateFitnessGoal(newValue);
+                  }
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select an option';
+                  }
+                  return null;
+                },
               ),
-              elevation: 5,
-              child: const Icon(Icons.arrow_back, color: Colors.white),
-            ),
+              TextFormField(
+                controller: _notesController,
+                decoration: const InputDecoration(
+                  labelText: 'Additional Notes',
+                ),
+                onChanged: (value) {
+                  userDataNotifier.updateAdditionalNotes(value);
+                },
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FloatingActionButton(
+                    onPressed: () {
+                      widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    child: const Icon(Icons.arrow_back),
+                  ),
+                  FloatingActionButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        widget.controller.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeIn,
+                        );
+                      }
+                    },
+                    child: const Icon(Icons.arrow_forward),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
-      ),
-
-      // Submit Button (Right FAB)
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(right: 20, bottom: 10),
-        child: FloatingActionButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              print('Specific Diet: $_specificDietState');
-              print('Fitness Goal: $_fitnessGoalState');
-              widget.controller.nextPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
-            }
-          },
-          backgroundColor: const Color(0xFFFF3333),
-          tooltip: 'Submit',
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-            side: const BorderSide(color: Colors.white, width: 2),
-          ),
-          elevation: 5,
-          child: const Icon(Icons.arrow_forward, size: 25, color: Colors.white),
         ),
       ),
     );

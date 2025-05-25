@@ -35,6 +35,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   smooth_page_indicator: ^1.2.1
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.3.5 # For code generation (optional but recommended)
+  dio: ^5.4.3+1             # Check for the latest version
+  # Optional, but highly recommended for models and states:
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +52,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  build_runner: ^2.4.9
+  freezed: ^2.5.2
+  json_serializable: ^6.8.0
+  riverpod_generator: ^2.4.0 # For code generation
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

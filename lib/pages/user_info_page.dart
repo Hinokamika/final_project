@@ -25,7 +25,26 @@ class _UserInfoPageState extends State<UserInfoPage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SizedBox(
-            height: screenHeight * 0.58,
+            height: (() {
+              // Check if keyboard is visible
+              bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+              
+              // If keyboard is visible, use reduced height
+              if (isKeyboardVisible) {
+              return screenHeight * 0.57;
+              }
+              
+              // Check orientation
+              bool isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+              
+              // Normal size when keyboard isn't visible
+              if (isPortrait) {
+              return screenHeight * 0.90;
+              } else {
+              // Landscape mode
+              return screenHeight * 0.8;
+              }
+            })(),
             child: PageView(
               controller: _controller,
               physics: const NeverScrollableScrollPhysics(),  // ← disable swipe

@@ -30,16 +30,17 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 110),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text(
                       'User Information',
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 30),
                     SizedBox(
                       width: 800, // Set the desired width here
                       child: Column(
@@ -113,7 +114,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
         ),
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(left: 20),
+        padding: const EdgeInsets.only(left: 20, bottom: 20),
         child: FloatingActionButton(
           onPressed: () {
             widget.controller.previousPage(

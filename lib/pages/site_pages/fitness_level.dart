@@ -1,155 +1,120 @@
-import 'package:final_project/components/dropdown_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/providers.dart'; // Import the providers.dart file
 
-final _formKey = GlobalKey<FormState>();
-
-class FitnessLevel extends StatefulWidget {
+class FitnessLevel extends ConsumerStatefulWidget {
   final PageController controller;
+
   const FitnessLevel({super.key, required this.controller});
 
   @override
-  State<FitnessLevel> createState() => _FitnessLevelState();
+  ConsumerState<FitnessLevel> createState() => _FitnessLevelState();
 }
 
-class _FitnessLevelState extends State<FitnessLevel> {
-  String? _fitnessLevelState;
-  String? _exerciseState;
+class _FitnessLevelState extends ConsumerState<FitnessLevel> {
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final userData = ref.watch(userDataProvider);
+    final userDataNotifier = ref.watch(userDataProvider.notifier);
+
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          // Main Content
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 25),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Fitness Level',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 30),
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              DropBoxMenu(
-                                labelText:
-                                    'How would you rate your fitness level?',
-                                value: _fitnessLevelState,
-                                options: {
-                                  'beginner':
-                                      'Beginner (little to no experience)',
-                                  'intermediate':
-                                      'Intermediate (some experience)',
-                                  'advanced': 'Advanced (more than 5 years)',
-                                },
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'PLease select your fitness level';
-                                  }
-                                },
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    _fitnessLevelState = value;
-                                  });
-                                },
-                              ),
-                              const SizedBox(height: 20),
-                              DropBoxMenu(
-                                labelText: 'Do you currently exercise?',
-                                value: _exerciseState,
-                                options: {
-                                  'yes': 'Yes (I exercise regularly)',
-                                  'no': 'No (I do not exercise regularly)',
-                                },
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'PLease select your exercise status';
-                                  }
-                                },
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    _exerciseState = value;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+      body: Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              const Text(
+                'Fitness Level',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-            ),
-          ),
-
-          // Back Button (Left FAB)
-          Positioned(
-            left: 40,
-            bottom: 40,
-            child: FloatingActionButton(
-              onPressed: () {
-                widget.controller.previousPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-              },
-              backgroundColor: Colors.grey,
-              tooltip: 'Go Back',
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-                side: const BorderSide(color: Colors.white, width: 2),
+              DropdownButtonFormField<String>(
+                value:
+                    userData.fitnessLevel.isEmpty
+                        ? null
+                        : userData.fitnessLevel,
+                decoration: const InputDecoration(labelText: 'Fitness Level'),
+                items:
+                    [
+                      'Beginner (little to no experience)',
+                      'Intermediate (some experience)',
+                      'Advanced (more than 5 years)',
+                    ].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                onChanged: (newValue) {
+                  if (newValue != null) {
+                    userDataNotifier.updateFitnessLevel(newValue);
+                  }
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select a fitness level';
+                  }
+                  return null;
+                },
               ),
-              elevation: 5,
-              child: const Icon(Icons.arrow_back, color: Colors.white),
-            ),
+              DropdownButtonFormField<String>(
+                value:
+                    userData.exerciseStatus.isEmpty
+                        ? null
+                        : userData.exerciseStatus,
+                decoration: const InputDecoration(labelText: 'Exercise Status'),
+                items:
+                    [
+                      'Yes (I exercise regularly)',
+                      'No (I do not exercise regularly)',
+                    ].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                onChanged: (newValue) {
+                  if (newValue != null) {
+                    userDataNotifier.updateExerciseStatus(newValue);
+                  }
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select an exercise status';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FloatingActionButton(
+                    onPressed: () {
+                      widget.controller.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn,
+                      );
+                    },
+                    child: const Icon(Icons.arrow_back),
+                  ),
+                  FloatingActionButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        widget.controller.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeIn,
+                        );
+                      }
+                    },
+                    child: const Icon(Icons.arrow_forward),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
-      ),
-
-      // Submit Button (Right FAB)
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(right: 20, bottom: 10),
-        child: FloatingActionButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              print('Level State: $_fitnessLevelState');
-              print('Exercise State: $_exerciseState');
-              widget.controller.nextPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
-            }
-          },
-          backgroundColor: const Color(0xFFFF3333),
-          tooltip: 'Submit',
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-            side: const BorderSide(color: Colors.white, width: 2),
-          ),
-          elevation: 5,
-          child: const Icon(Icons.arrow_forward, size: 25, color: Colors.white),
         ),
       ),
     );
