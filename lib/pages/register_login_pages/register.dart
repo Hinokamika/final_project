@@ -35,6 +35,26 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
+                      labelText: 'Username',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                          color: Colors.black,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                    validator: (value) => 
+                        value == null || value.isEmpty
+                            ? 'Please enter your email'
+                            : !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)
+                                ? 'Please enter username '
+                                : null,
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
                       labelText: 'Email',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
