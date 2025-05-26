@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/providers.dart';
+import '../../core/user_details_provider.dart';
 
 class FitnessLevel extends ConsumerStatefulWidget {
   final PageController controller;
@@ -138,6 +138,34 @@ class _FitnessLevelState extends ConsumerState<FitnessLevel> {
                                 },
                               ),
                               const SizedBox(height: 20),
+                              if (userData.exerciseStatus ==
+                                  'Yes (I exercise regularly)')
+                                TextFormField(
+                                  initialValue: userData.exerciseFrequency,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Exercise Frequency',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(12),
+                                      ),
+                                      borderSide: BorderSide(
+                                        color: Colors.black,
+                                        width: 1,
+                                      ),
+                                    ),
+                                  ),
+                                  onChanged: (value) {
+                                    userDataNotifier.updateExerciseFrequency(
+                                      value,
+                                    );
+                                  },
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter your exercise frequency';
+                                    }
+                                    return null;
+                                  },
+                                ),
                             ],
                           ),
                         ),

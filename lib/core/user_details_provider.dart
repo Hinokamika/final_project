@@ -9,6 +9,7 @@ class UserData {
   final String additionalNotes;
   final String fitnessLevel;
   final String exerciseStatus;
+  final String exerciseFrequency;
 
   UserData({
     required this.name,
@@ -16,9 +17,10 @@ class UserData {
     required this.ageGroup,
     required this.primaryHealthGoal,
     required this.fitnessGoal,
-    required this.additionalNotes,
+    this.additionalNotes = '',
     required this.fitnessLevel,
     required this.exerciseStatus,
+    this.exerciseFrequency = '',
   });
 
   UserData copyWith({
@@ -30,6 +32,7 @@ class UserData {
     String? additionalNotes,
     String? fitnessLevel,
     String? exerciseStatus,
+    String? exerciseFrequency,
   }) {
     return UserData(
       name: name ?? this.name,
@@ -40,6 +43,7 @@ class UserData {
       additionalNotes: additionalNotes ?? this.additionalNotes,
       fitnessLevel: fitnessLevel ?? this.fitnessLevel,
       exerciseStatus: exerciseStatus ?? this.exerciseStatus,
+      exerciseFrequency: exerciseFrequency ?? this.exerciseFrequency,
     );
   }
 }
@@ -56,6 +60,7 @@ class UserDataNotifier extends StateNotifier<UserData> {
           additionalNotes: '',
           fitnessLevel: '',
           exerciseStatus: '',
+          exerciseFrequency: '',
         ),
       );
 
@@ -90,6 +95,11 @@ class UserDataNotifier extends StateNotifier<UserData> {
   void updateExerciseStatus(String newExerciseStatus) {
     state = state.copyWith(exerciseStatus: newExerciseStatus);
   }
+
+  void updateExerciseFrequency(String newFrequency) {
+    state = state.copyWith(exerciseFrequency: newFrequency);
+  }
+  
 }
 
 final userDataProvider = StateNotifierProvider<UserDataNotifier, UserData>(
