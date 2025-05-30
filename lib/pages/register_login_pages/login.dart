@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'forget_password.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -86,16 +88,11 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       obscureText: true,
                     ),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 10),
                     GestureDetector(
                       onTap: () {
-                        // Handle forgot password action
-                        print('Forgot Password clicked');
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Forgot Password feature not implemented'),
-                          ),
-                        );
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ForgetPassword()
+                        ));
                       },
                       child: Text(
                         'Forgot Password?',
@@ -107,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                         textAlign: TextAlign.right,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 1),
                     Text(
                       errorMessage,
                       style: const TextStyle(
@@ -115,15 +112,11 @@ class _LoginPageState extends State<LoginPage> {
                         fontSize: 16,
                       ),
                     ),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 1),
                     ElevatedButton(
                       onPressed: () {
                         if (_loginformKey.currentState!.validate()) {
                           // Perform login action
-                          print(
-                            'Login successful with email: ${_emailController.text}',
-                          );
-                          print('Password: ${_passwordController.text}');
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Login successful!')),
                           );
@@ -162,7 +155,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
           ],
         ),
       ),

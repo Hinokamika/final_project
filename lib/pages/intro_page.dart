@@ -1,4 +1,4 @@
-import 'package:final_project/pages/user_info_page.dart';
+import 'package:final_project/router/layout_route.dart';
 import 'package:flutter/material.dart';
 
 class IntroPage extends StatelessWidget {
@@ -37,11 +37,9 @@ class IntroPage extends StatelessWidget {
             SizedBox(
               width: 500, // Set the desired width here
               child: ElevatedButton(
-                onPressed:
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => UserInfoPage()),
-                    ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/UserInfo');
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFFFF3333),
                   padding: const EdgeInsets.all(25),

@@ -27,7 +27,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 110),
+                padding: const EdgeInsets.symmetric(horizontal: 90),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
