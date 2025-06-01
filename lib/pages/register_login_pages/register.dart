@@ -1,23 +1,25 @@
+import 'package:final_project/pages/register_login_pages/authentication_service/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/user_authentication.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  ConsumerState<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _registerFormKey = GlobalKey<FormState>();
-  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
-  String errorString = ''; // Changed from final to a mutable variable
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  String errorString = '';
+
   @override
   void dispose() {
-    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -25,7 +27,47 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    // You cannot use ref directly in initState
+    // Move any initialization logic to build or use addPostFrameCallback
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Access ref safely here after the widget is built
+      final authData = ref.read(userAuthenticationProvider);
+      // Your initialization code with authData
+    });
+  }
+
+  void register() async {
+    setState(() {
+      errorString = '';
+    });
+
+    final isValid =
+        _registerFormKey.currentState?.validate() ?? false;
+    if (!isValid) {
+      setState(() {
+        errorString = errorString.isNotEmpty
+            ? errorString
+            : 'Please complete all fields correctly';
+      });
+      return;
+    }
+    try {
+      await authServiceProvider.value.createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
+      Navigator.pushNamed(context, '/Login');
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorString = 'Registration failed: ${e.toString()}';
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final authData = ref.watch(userAuthenticationProvider);
+    final authDataNotifier = ref.watch(userAuthenticationProvider.notifier);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -47,30 +89,6 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 children: [
                   TextFormField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                      labelText: 'Username',
-                      errorMaxLines: 0,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Colors.black,
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        setState(() {
-                          errorString = 'Please enter your username';
-                        });
-                        return '';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
                       labelText: 'Email',
@@ -82,6 +100,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ),
+                    onChanged: (value) {
+                      authDataNotifier.updateEmail(value);
+                    },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         setState(() {
@@ -112,6 +133,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                     obscureText: true,
+                    onChanged: (value) {
+                      authDataNotifier.updatePassword(value);
+                    },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         setState(() {
@@ -152,10 +176,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         return '';
                       }
                       if (value != _passwordController.text) {
-                        setState(() {
-                          errorString = 'Passwords do not match';
-                        });
-                        return '';
+                        return 'Passwords do not match';
                       }
                       return null;
                     },
@@ -180,17 +201,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     width: 300, // Updated width for buttons
                     child: ElevatedButton(
                       onPressed: () {
-                        // Clear any previous error messages
-                        setState(() {
-                          errorString = '';
-                        });
-
-                        if (_registerFormKey.currentState!.validate()) {
-                          // If validation passes, errorString will remain empty
-                          // Handle registration logic here
-                          Navigator.pushNamed(context, '/Login');
-                        }
-                        // If validation fails, errorString will be set by the validators
+                        register();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFFF3333),

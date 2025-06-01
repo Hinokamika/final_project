@@ -1,4 +1,3 @@
-import 'package:final_project/router/layout_route.dart';
 import 'package:flutter/material.dart';
 
 class IntroPage extends StatelessWidget {

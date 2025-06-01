@@ -1,19 +1,67 @@
+import 'package:final_project/pages/register_login_pages/authentication_service/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/user_authentication.dart';
+import '../../core/user_details_provider.dart';
 
 import 'forget_password.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final _loginformKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String errorMessage = '';
+
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void login() async {
+    setState(() {
+      errorMessage = '';
+    });
+
+    final isValid = _loginformKey.currentState?.validate() ?? false;
+    if (!isValid) {
+      setState(() {
+        errorMessage = 'Please complete all fields correctly';
+      });
+      return;
+    }
+
+    try{
+      await authServiceProvider.value.signInWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
+      final userData = ref.read(userDataProvider);
+      if (userData.imgUrl.isNotEmpty) {
+        // User already has an image, go directly to main menu
+        Navigator.pushNamed(context, '/MenuPage');
+      } else {
+        // User needs to upload an avatar
+        Navigator.pushNamed(context, '/UploadAvatar');
+      }
+    }on FirebaseAuthException catch (e) {
+      setState(() {
+        if (e.code == 'user-not-found') {
+          errorMessage = 'No user found for that email.';
+        } else if (e.code == 'wrong-password') {
+          errorMessage = 'Wrong password provided for that user.';
+        } else {
+          errorMessage = 'An error occurred. Please try again.';
+        }
+      });
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +114,6 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _passwordController,
                       decoration: InputDecoration(
                         labelText: 'Password',
-              
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
@@ -91,8 +138,10 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 10),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ForgetPassword()
-                        ));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ForgetPassword()));
                       },
                       child: Text(
                         'Forgot Password?',
@@ -114,23 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 1),
                     ElevatedButton(
-                      onPressed: () {
-                        if (_loginformKey.currentState!.validate()) {
-                          // Perform login action
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Login successful!')),
-                          );
-                          Navigator.pushNamed(context, '/UploadAvatar');
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Please fill in all fields correctly.',
-                              ),
-                            ),
-                          );
-                        }
-                      },
+                      onPressed: login, // Call the login function
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFFF3333),
                         padding: const EdgeInsets.all(25),
