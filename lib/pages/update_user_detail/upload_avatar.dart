@@ -11,36 +11,39 @@ class _UploadAvatarState extends State<UploadAvatar> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'Upload Avatar',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 130),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Upload Avatar',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
-          ),
-          SizedBox(height: 30),
-          Stack(
-            children: [
-              CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage('assets/images/default_avatar.png'),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: IconButton(
-                  icon: Icon(Icons.camera_alt),
-                  onPressed: () {}
+            SizedBox(height: 30),
+            Stack(
+              children: [
+                CircleAvatar(
+                  radius: 80,
+
                 ),
-              ),
-            ],
-          ),
-        ],
+                Positioned(
+                  top: 65,
+                  right: 65,
+                  child: IconButton(
+                    icon: Icon(Icons.camera_alt),
+                    onPressed: null
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

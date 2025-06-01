@@ -11,5 +11,5 @@ pickImage() async {
   } else {
     return null; // Return null if no image was selected
   }
-  print("")
+  print("");
 }
