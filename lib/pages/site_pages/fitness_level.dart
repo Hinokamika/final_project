@@ -55,6 +55,50 @@ class _FitnessLevelState extends ConsumerState<FitnessLevel> {
                             children: [
                               DropdownButtonFormField<String>(
                                 value:
+                                    userData.exerciseStatus.isEmpty
+                                        ? null
+                                        : userData.exerciseStatus,
+                                decoration: const InputDecoration(
+                                  labelText: 'Exercise Status',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(12),
+                                    ),
+                                    borderSide: BorderSide(
+                                      color: Colors.black,
+                                      width: 1,
+                                    ),
+                                  ),
+                                ),
+                                items:
+                                    [
+                                      'Yes (I exercise regularly)',
+                                      'No (I do not exercise regularly)',
+                                    ].map((String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                onChanged: (newValue) {
+                                  if (newValue != null) {
+                                    userDataNotifier.updateExerciseStatus(
+                                      newValue,
+                                    );
+                                  }
+                                },
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please select an exercise status';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 20),
+                              if (userData.exerciseStatus ==
+                                  'Yes (I exercise regularly)')
+                               DropdownButtonFormField<String>(
+                                value:
                                     userData.fitnessLevel.isEmpty
                                         ? null
                                         : userData.fitnessLevel,
@@ -91,48 +135,6 @@ class _FitnessLevelState extends ConsumerState<FitnessLevel> {
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Please select a fitness level';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(height: 30),
-                              DropdownButtonFormField<String>(
-                                value:
-                                    userData.exerciseStatus.isEmpty
-                                        ? null
-                                        : userData.exerciseStatus,
-                                decoration: const InputDecoration(
-                                  labelText: 'Exercise Status',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(12),
-                                    ),
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                      width: 1,
-                                    ),
-                                  ),
-                                ),
-                                items:
-                                    [
-                                      'Yes (I exercise regularly)',
-                                      'No (I do not exercise regularly)',
-                                    ].map((String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                onChanged: (newValue) {
-                                  if (newValue != null) {
-                                    userDataNotifier.updateExerciseStatus(
-                                      newValue,
-                                    );
-                                  }
-                                },
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please select an exercise status';
                                   }
                                   return null;
                                 },

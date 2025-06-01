@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UserData {
   final String name;
+  final String imgUrl;
   final String gender;
   final String ageGroup;
   final String primaryHealthGoal;
@@ -13,18 +14,20 @@ class UserData {
 
   UserData({
     required this.name,
+    this.imgUrl = '',
     required this.gender,
     required this.ageGroup,
     required this.primaryHealthGoal,
     required this.fitnessGoal,
     this.additionalNotes = '',
-    required this.fitnessLevel,
+    this.fitnessLevel = '',
     required this.exerciseStatus,
     this.exerciseFrequency = '',
   });
 
   UserData copyWith({
     String? name,
+    String? imgUrl,
     String? gender,
     String? ageGroup,
     String? primaryHealthGoal,
@@ -36,6 +39,7 @@ class UserData {
   }) {
     return UserData(
       name: name ?? this.name,
+      imgUrl: imgUrl ?? this.imgUrl,
       gender: gender ?? this.gender,
       ageGroup: ageGroup ?? this.ageGroup,
       primaryHealthGoal: primaryHealthGoal ?? this.primaryHealthGoal,
@@ -53,6 +57,7 @@ class UserDataNotifier extends StateNotifier<UserData> {
     : super(
         UserData(
           name: '',
+          imgUrl: '',
           gender: '',
           ageGroup: '',
           primaryHealthGoal: '',
@@ -66,6 +71,10 @@ class UserDataNotifier extends StateNotifier<UserData> {
 
   void updateName(String newName) {
     state = state.copyWith(name: newName);
+  }
+
+  void updateImageUrl(String newImgUrl) {
+    state = state.copyWith(imgUrl: newImgUrl);
   }
 
   void updateGender(String newGender) {
@@ -105,3 +114,13 @@ class UserDataNotifier extends StateNotifier<UserData> {
 final userDataProvider = StateNotifierProvider<UserDataNotifier, UserData>(
   (ref) => UserDataNotifier(),
 );
+
+final isDataCompleteProvider = Provider<bool>((ref) {
+  final userData = ref.watch(userDataProvider);
+  return userData.name.isNotEmpty &&
+         userData.gender.isNotEmpty &&
+         userData.ageGroup.isNotEmpty &&
+         userData.primaryHealthGoal.isNotEmpty &&
+         userData.fitnessGoal.isNotEmpty &&
+         userData.exerciseStatus.isNotEmpty;
+});

@@ -7,5 +7,18 @@ import 'router/layout_route.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const ProviderScope(child: LayoutRoute()));
+  runApp(const ProviderScope(child: MyApp()));
+}
+
+/// Main application widget
+///
+/// This class exists primarily to support testing and wraps the [LayoutRoute]
+/// which contains the actual application routes and theme.
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const LayoutRoute();
+  }
 }
