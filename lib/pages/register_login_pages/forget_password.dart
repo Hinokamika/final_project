@@ -18,7 +18,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
       body: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: Padding(
-          padding: const EdgeInsets.only(top: 25),
+          padding: const EdgeInsets.only(top: 1),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
