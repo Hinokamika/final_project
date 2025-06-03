@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/user_details_provider.dart'; // Import the providers.dart file
+import '../../core/provider/user_details_provider.dart'; // Import the providers.dart file
 
 class UserInformation extends ConsumerStatefulWidget {
   final PageController controller;

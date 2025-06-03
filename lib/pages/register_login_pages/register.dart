@@ -2,7 +2,7 @@ import 'package:final_project/pages/register_login_pages/authentication_service/
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/user_authentication.dart';
+import '../../core/provider/user_authentication.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
