@@ -1,35 +1,44 @@
-// filepath: x:\Flutter\final_project\lib\constants\api_endpoint.dart
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiEndpoints {
-  // Base URLs
-  static const String baseUrl = 'https://api.example.com/v1';
-  static const String imageBaseUrl = 'https://api.example.com/images';
+  static String get baseUrl =>
+      dotenv.env['BASE_URL'] ?? 'https://default-url.com/api';
 
   // Authentication endpoints
-  static const String login = '$baseUrl/auth/login';
-  static const String register = '$baseUrl/auth/register';
-  static const String logout = '$baseUrl/auth/logout';
-  static const String refreshToken = '$baseUrl/auth/refresh-token';
-  static const String forgotPassword = '$baseUrl/auth/forgot-password';
-  static const String resetPassword = '$baseUrl/auth/reset-password';
+  static String get login => '$baseUrl/user/get';
+  static String get register => '$baseUrl/user/create';
+  static String get updateUser => '$baseUrl/user/update/:id';
+  static String get deleteUser => '$baseUrl/user/delete/:id';
+  static String get getUserbyId => '$baseUrl/user/get/:id';
 
   // User related endpoints
-  static const String userProfile = '$baseUrl/user/profile';
-  static const String updateProfile = '$baseUrl/user/update';
-  static const String changePassword = '$baseUrl/user/change-password';
-  static const String uploadProfileImage = '$baseUrl/user/upload-image';
+  static String get getUserProfile => '$baseUrl/user-detail/';
+  static String get updateUserProfile => '$baseUrl/user-detail/:id';
+  static String get deleteUserProfile => '$baseUrl/user-detail/:id';
+  static String get getUserProfileById => '$baseUrl/user-detail/:id';
+  static String get createUserProfile => '$baseUrl/user-detail/';
 
-  // Content related endpoints
-  static const String getItems = '$baseUrl/items';
-  static const String getItemDetail = '$baseUrl/items/detail';
-  static const String searchItems = '$baseUrl/items/search';
+  // Workout related endpoints
+  static String get getWorkoutLogs => '$baseUrl/exercise-log/';
+  static String get getWorkoutLogsById => '$baseUrl/exercise-log/:id';
+  static String get getWorkoutLogsByUserId => '$baseUrl/exercise-log/user/:userId';
+  static String get createWorkoutLog => '$baseUrl/exercise-log/';
+  static String get updateWorkoutLog => '$baseUrl/exercise-log/:id';
+  static String get deleteWorkoutLog => '$baseUrl/exercise-log/:id';
 
-  // Notification endpoints
-  static const String notifications = '$baseUrl/notifications';
-  static const String markAsRead = '$baseUrl/notifications/mark-read';
+  // Health related endpoints
+  static String get getHealthLogs => '$baseUrl/health-log/';
+  static String get getHealthLogsById => '$baseUrl/health-log/:id';
+  static String get getHealthLogsByUserId => '$baseUrl/health-log/user/:userId';
+  static String get createHealthLog => '$baseUrl/health-log/';
+  static String get updateHealthLog => '$baseUrl/health-log/:id';
+  static String get deleteHealthLog => '$baseUrl/health-log/:id';
 
-  // Settings and configurations
-  static const String appSettings = '$baseUrl/settings';
-  static const String appVersion = '$baseUrl/version';
+  // Nutrition related endpoints
+  static String get getNutritionLogs => '$baseUrl/nutrition-log/';
+  static String get getNutritionLogsById => '$baseUrl/nutrition-log/:id';
+  static String get getNutritionLogsByUserId => '$baseUrl/nutrition-log/user/:userId';
+  static String get createNutritionLog => '$baseUrl/nutrition-log/';
+  static String get updateNutritionLog => '$baseUrl/nutrition-log/:id';
+  static String get deleteNutritionLog => '$baseUrl/nutrition-log/:id';
 }
-
