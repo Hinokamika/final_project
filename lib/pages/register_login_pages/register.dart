@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/provider/user_authentication.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -36,9 +38,15 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     // Move any initialization logic to build or use addPostFrameCallback
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Access ref safely here after the widget is built
-      final authData = ref.read(userAuthenticationProvider);
-      // Your initialization code with authData
+      // Your initialization code here if needed
     });
+  }
+
+  // Function to hash passwords using SHA-256
+  String hashPassword(String password) {
+    var bytes = utf8.encode(password); // Convert password to bytes
+    var digest = sha256.convert(bytes); // Hash the password with SHA-256
+    return digest.toString(); // Return the hashed password as a string
   }
 
   void register() async {
@@ -57,10 +65,15 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       return;
     }
     try {
+      // Hash the password before sending it to your database service
+      String hashedPassword = hashPassword(_passwordController.text);
+
       await _userAuthService.register(
         _emailController.text,
-        _passwordController.text,
+        hashedPassword, // Send the hashed password to your database service
       );
+
+      // For Firebase Auth, use the original password (Firebase handles its own password hashing)
       await authServiceProvider.value.createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
@@ -75,7 +88,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final authData = ref.watch(userAuthenticationProvider);
+    // Using the notifier only, not watching the state directly since we don't use it
     final authDataNotifier = ref.watch(userAuthenticationProvider.notifier);
 
     return Scaffold(

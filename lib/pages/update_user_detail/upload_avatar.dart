@@ -125,7 +125,7 @@ class _UploadAvatarState extends ConsumerState<UploadAvatar> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_image != null) {
-                          Navigator.pop(context); // Go back after saving
+                          Navigator.pushNamed(context, '/MenuPage');
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
