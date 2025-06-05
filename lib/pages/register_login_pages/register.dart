@@ -68,6 +68,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       // Hash the password before sending it to your database service
       String hashedPassword = hashPassword(_passwordController.text);
 
+      // This will now save the user in Hive with isAuthenticated set to TRUE
       await _userAuthService.register(
         _emailController.text,
         hashedPassword, // Send the hashed password to your database service
@@ -78,8 +79,22 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      Navigator.pushNamed(context, '/Login');
+
+      // Show success message
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Registration successful! User data saved locally.'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.pushNamed(context, '/Login');
+      }
     } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorString = 'Registration failed: ${e.toString()}';
+      });
+    } catch (e) {
       setState(() {
         errorString = 'Registration failed: ${e.toString()}';
       });
