@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../components/pick_image.dart';
-import '../../core/user_details_provider.dart';
+import '../../core/provider/user_details_provider.dart';
 
 class UploadAvatar extends ConsumerStatefulWidget {
   const UploadAvatar({super.key});

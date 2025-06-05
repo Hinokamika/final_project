@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/user_details_provider.dart';
+import '../../core/provider/user_details_provider.dart';
 
 class FitnessLevel extends ConsumerStatefulWidget {
   final PageController controller;

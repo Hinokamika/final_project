@@ -1,8 +1,9 @@
+import 'package:final_project/core/database/userAuthService.dart';
 import 'package:final_project/pages/register_login_pages/authentication_service/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/user_authentication.dart';
+import '../../core/provider/user_authentication.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -12,10 +13,12 @@ class RegisterPage extends ConsumerStatefulWidget {
 }
 
 class _RegisterPageState extends ConsumerState<RegisterPage> {
+  final UserAuthService _userAuthService = UserAuthService();
   final _registerFormKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   String errorString = '';
 
   @override
@@ -43,18 +46,25 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       errorString = '';
     });
 
-    final isValid =
-        _registerFormKey.currentState?.validate() ?? false;
+    final isValid = _registerFormKey.currentState?.validate() ?? false;
     if (!isValid) {
       setState(() {
-        errorString = errorString.isNotEmpty
-            ? errorString
-            : 'Please complete all fields correctly';
+        errorString =
+            errorString.isNotEmpty
+                ? errorString
+                : 'Please complete all fields correctly';
       });
       return;
     }
     try {
-      await authServiceProvider.value.createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
+      await _userAuthService.register(
+        _emailController.text,
+        _passwordController.text,
+      );
+      await authServiceProvider.value.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
       Navigator.pushNamed(context, '/Login');
     } on FirebaseAuthException catch (e) {
       setState(() {
