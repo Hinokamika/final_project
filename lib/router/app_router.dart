@@ -5,6 +5,9 @@ import 'package:final_project/pages/update_user_detail/upload_avatar.dart';
 import 'package:final_project/pages/user_info_page.dart';
 import 'package:final_project/pages/main_pages/menu_page.dart';
 import 'package:final_project/pages/register_login_pages/authentication_service/auth_service.dart';
+import 'package:final_project/models/user_auth_models.dart';
+import 'package:final_project/constants/internet_checked.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter extends StatelessWidget {
@@ -33,11 +36,70 @@ class AppRouter extends StatelessWidget {
   }
 }
 
-class AuthGate extends StatelessWidget {
+class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
 
   @override
+  State<AuthGate> createState() => _AuthGateState();
+}
+
+class _AuthGateState extends State<AuthGate> {
+  bool _isCheckingOfflineAuth = true;
+  bool _isOfflineAuthenticated = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkOfflineAuthentication();
+  }
+
+  // Check if there's an offline authenticated user in Hive
+  Future<void> _checkOfflineAuthentication() async {
+    try {
+      final box = await Hive.openBox<UserAuthModels>('userAuthModels');
+
+      // Find any user that has isAuthenticated = true
+      final authenticatedUser = box.values.firstWhere(
+        (user) => user.isAuthenticated == true,
+        orElse:
+            () => UserAuthModels(
+              email: null,
+              passwordHash: null,
+              isAuthenticated: false,
+            ),
+      );
+
+      setState(() {
+        _isOfflineAuthenticated = authenticatedUser.isAuthenticated ?? false;
+        _isCheckingOfflineAuth = false;
+      });
+
+      if (_isOfflineAuthenticated) {
+        debugPrint(
+          'Found authenticated user in offline storage: ${authenticatedUser.email}',
+        );
+      }
+    } catch (e) {
+      debugPrint('Error checking offline authentication: $e');
+      setState(() {
+        _isCheckingOfflineAuth = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // If we're still checking offline auth, show loading
+    if (_isCheckingOfflineAuth) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    // If user is authenticated offline, go directly to menu page
+    if (_isOfflineAuthenticated) {
+      return const MenuPage();
+    }
+
+    // Otherwise, check online authentication with Firebase
     return ValueListenableBuilder(
       valueListenable: authServiceProvider,
       builder: (context, authService, child) {
@@ -53,9 +115,9 @@ class AuthGate extends StatelessWidget {
             } else {
               return const IntroPage();
             }
-          }
+          },
         );
-      }
+      },
     );
   }
 }
